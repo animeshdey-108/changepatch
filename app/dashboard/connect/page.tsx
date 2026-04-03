@@ -1,7 +1,8 @@
-﻿'use client'
+"use client"
 
-import { useEffect, useState, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState, useCallback } from "react"
+import { useRouter } from "next/navigation"
+import { Logo, NavBar, PageShell } from "@/app/components/ui"
 
 interface GitHubRepo {
   id: number
@@ -20,34 +21,32 @@ export default function ConnectRepoPage() {
   const [loading, setLoading] = useState(true)
   const [connecting, setConnecting] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState("")
 
   const fetchRepos = useCallback(async () => {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch('/api/github/repos')
+      const res = await fetch("/api/github/repos")
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
       setRepos(data.repos)
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to load repositories.')
+      setError(err instanceof Error ? err.message : "Failed to load repositories.")
     } finally {
       setLoading(false)
     }
   }, [])
 
-  useEffect(() => {
-    fetchRepos()
-  }, [fetchRepos])
+  useEffect(() => { fetchRepos() }, [fetchRepos])
 
   async function connectRepo(repo: GitHubRepo) {
     setConnecting(repo.id)
     setError(null)
     try {
-      const res = await fetch('/api/github/connect', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/github/connect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           github_repo_id: repo.id,
           github_repo_name: repo.name,
@@ -58,38 +57,45 @@ export default function ConnectRepoPage() {
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
-      router.push('/dashboard')
+      router.push("/dashboard")
       router.refresh()
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to connect repository.')
+      setError(err instanceof Error ? err.message : "Failed to connect repository.")
     } finally {
       setConnecting(null)
     }
   }
 
-  const filtered = repos.filter((r) =>
-    r.full_name.toLowerCase().includes(search.toLowerCase())
-  )
+  const filtered = repos.filter((r) => r.full_name.toLowerCase().includes(search.toLowerCase()))
 
   return (
-    <main className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-2xl mx-auto">
+    <PageShell>
+      <NavBar>
+        <Logo />
+        <button onClick={() => router.push("/dashboard")} className="text-xs text-zinc-400 hover:text-zinc-900 transition-colors">
+          Back to dashboard
+        </button>
+      </NavBar>
+
+      <div className="max-w-2xl mx-auto px-6 py-10">
         <div className="mb-8">
-          <button
-            onClick={() => router.back()}
-            className="text-sm text-gray-500 hover:text-gray-900 mb-4 flex items-center gap-1"
-          >
-            Back
-          </button>
-          <h1 className="text-xl font-semibold text-gray-900">Connect a repository</h1>
-          <p className="mt-1 text-sm text-gray-500">
-            Select a GitHub repository to start auto-generating changelogs.
+          <h1 className="text-xl font-semibold text-zinc-900 tracking-tight mb-1">Connect a repository</h1>
+          <p className="text-sm text-zinc-500">Select a GitHub repository to start auto-generating changelogs.</p>
+        </div>
+
+        <div className="mb-4 px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 flex items-start gap-3">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="mt-0.5 flex-shrink-0">
+            <rect x="1.5" y="6" width="11" height="7" rx="1.5" stroke="#71717A" strokeWidth="1.2"/>
+            <path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6" stroke="#71717A" strokeWidth="1.2" strokeLinecap="round"/>
+          </svg>
+          <p className="text-xs text-zinc-500 leading-relaxed">
+            ChangePatch requests read-only access to your commit history only. It cannot write code, open pull requests, or modify your repository in any way.
           </p>
         </div>
 
         {error && (
-          <div className="mb-4 px-4 py-3 rounded-lg bg-red-50 border border-red-100">
-            <p className="text-sm text-red-700">{error}</p>
+          <div className="mb-4 px-4 py-3 rounded-xl bg-rose-50 border border-rose-100">
+            <p className="text-sm text-rose-600">{error}</p>
           </div>
         )}
 
@@ -100,52 +106,49 @@ export default function ConnectRepoPage() {
               placeholder="Search repositories..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none"
+              className="w-full px-4 py-2.5 text-sm border border-zinc-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-400 transition-all"
             />
           </div>
         )}
 
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+        <div className="bg-white border border-zinc-200/80 rounded-2xl shadow-sm overflow-hidden">
           {loading ? (
-            <div className="p-8 text-center">
-              <p className="text-sm text-gray-500">Loading your repositories...</p>
+            <div className="p-12 text-center">
+              <div className="inline-block w-5 h-5 border-2 border-zinc-200 border-t-zinc-900 rounded-full animate-spin mb-3" />
+              <p className="text-sm text-zinc-400">Loading your repositories...</p>
             </div>
           ) : filtered.length === 0 ? (
-            <div className="p-8 text-center">
-              <p className="text-sm text-gray-500">
-                {search ? 'No repositories match your search.' : 'No repositories found.'}
-              </p>
+            <div className="p-12 text-center">
+              <p className="text-sm text-zinc-400">{search ? "No repositories match your search." : "No repositories found."}</p>
             </div>
           ) : (
-            <ul className="divide-y divide-gray-100">
+            <ul className="divide-y divide-zinc-100">
               {filtered.map((repo) => (
-                <li
-                  key={repo.id}
-                  className="flex items-center justify-between px-5 py-4 hover:bg-gray-50"
-                >
+                <li key={repo.id} className="flex items-center justify-between px-5 py-3.5 hover:bg-zinc-50/80 transition-colors">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-900 truncate">
-                        {repo.full_name}
-                      </span>
+                      <span className="text-sm font-medium text-zinc-900 truncate">{repo.full_name}</span>
                       {repo.private && (
-                        <span className="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-500">
-                          private
-                        </span>
+                        <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-md bg-zinc-100 text-zinc-500">private</span>
                       )}
                     </div>
-                    <p className="text-xs text-gray-400 mt-0.5">{repo.default_branch} branch</p>
+                    <p className="text-xs text-zinc-400 mt-0.5">{repo.default_branch}</p>
                   </div>
                   <div className="ml-4 flex-shrink-0">
                     {repo.already_connected ? (
-                      <span className="text-xs text-green-600 font-medium">Connected</span>
+                      <span className="text-xs font-medium text-emerald-600 flex items-center gap-1">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        Connected
+                      </span>
                     ) : (
                       <button
                         onClick={() => connectRepo(repo)}
                         disabled={connecting === repo.id}
-                        className="text-sm px-4 py-1.5 rounded-lg bg-gray-900 text-white hover:bg-gray-700 disabled:opacity-50"
+                        className="text-xs font-medium px-3 py-1.5 rounded-lg bg-zinc-900 text-white hover:bg-zinc-700 disabled:opacity-50 transition-all flex items-center gap-1.5"
                       >
-                        {connecting === repo.id ? 'Connecting...' : 'Connect'}
+                        {connecting === repo.id ? (
+                          <><div className="w-3 h-3 border border-white/30 border-t-white rounded-full animate-spin" />Connecting...</>
+                        ) : "Connect"}
                       </button>
                     )}
                   </div>
@@ -154,7 +157,10 @@ export default function ConnectRepoPage() {
             </ul>
           )}
         </div>
+        <p className="mt-4 text-xs text-zinc-400 text-center">
+          Don't see your repo? <a href="https://github.com/settings/connections/applications" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-zinc-600">Check GitHub permissions</a>
+        </p>
       </div>
-    </main>
+    </PageShell>
   )
 }
