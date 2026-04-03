@@ -1,4 +1,4 @@
-﻿import { signInWithGitHub } from "@/lib/auth/actions"
+import { signInWithGitHub } from "@/lib/auth/actions"
 import { getUser } from "@/lib/auth/actions"
 import { redirect } from "next/navigation"
 import { Logo } from "@/app/components/ui"
@@ -24,95 +24,83 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const errorMessage = error ? (errorMessages[error] ?? errorMessages.default) : null
 
   return (
-    <main className="min-h-screen bg-white flex">
-      <div className="flex-1 flex flex-col">
-        <header className="px-8 py-6">
-          <Logo />
-        </header>
+    <main className="min-h-screen bg-surface flex">
+      <div
+        className="fixed inset-0 pointer-events-none"
+        style={{
+          backgroundImage: "linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px)",
+          backgroundSize: "48px 48px",
+        }}
+      />
 
-        <div className="flex-1 flex items-center justify-center px-6 pb-16">
-          <div className="w-full max-w-sm">
-            <div className="mb-8">
-              <h1 className="text-2xl font-semibold text-zinc-900 tracking-tight mb-2">
-                Welcome back
-              </h1>
-              <p className="text-sm text-zinc-500">
-                Sign in to start generating changelogs automatically.
-              </p>
-            </div>
+      {/* left panel */}
+      <div className="relative z-10 flex-1 flex flex-col px-12 py-8">
+        <Logo />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="w-full max-w-[340px] animate-fade-up">
+            <h1 className="text-2xl font-bold text-text-primary tracking-tight mb-2">Welcome back</h1>
+            <p className="text-sm text-text-dim mb-8 leading-relaxed">
+              Sign in to start generating changelogs automatically.
+            </p>
 
             {errorMessage && (
-              <div className="mb-5 px-4 py-3 rounded-lg bg-rose-50 border border-rose-100">
-                <p className="text-sm text-rose-600">{errorMessage}</p>
+              <div className="mb-5 px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                <p className="text-xs text-red-400">{errorMessage}</p>
               </div>
             )}
 
-            <form action={signInWithGitHub} className="space-y-3">
+            <form action={signInWithGitHub}>
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-700 text-white text-sm font-medium transition-all duration-150 active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2"
+                className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl bg-white text-surface text-sm font-semibold transition-all duration-150 hover:bg-white/90 active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#09090b">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
                 </svg>
                 Continue with GitHub
               </button>
             </form>
 
-            <div className="mt-6 grid grid-cols-3 gap-3 text-center">
-              {[
-                { label: "Read-only access" },
-                { label: "No code access" },
-                { label: "Revoke anytime" },
-              ].map((item) => (
-                <div key={item.label} className="px-2 py-2 rounded-lg bg-zinc-50 border border-zinc-100">
-                  <p className="text-[11px] text-zinc-500 font-medium leading-tight">{item.label}</p>
+            <div className="mt-6 grid grid-cols-3 gap-2">
+              {["Read-only access", "No code access", "Revoke anytime"].map((item) => (
+                <div key={item} className="px-2 py-2.5 rounded-lg bg-white/[0.03] border border-white/[0.06] text-center">
+                  <p className="text-[10px] font-mono text-text-ghost leading-tight">{item}</p>
                 </div>
               ))}
             </div>
 
-            <p className="mt-6 text-center text-xs text-zinc-400">
-              By signing in, you agree to our{" "}
-              <a href="/terms" className="underline underline-offset-2 hover:text-zinc-600">Terms</a>
-              {" "}and{" "}
-              <a href="/privacy" className="underline underline-offset-2 hover:text-zinc-600">Privacy Policy</a>.
+            <p className="mt-6 text-center text-[11px] text-text-ghost">
+              {"By signing in you agree to our "}
+              <a href="/terms" className="text-text-dim hover:text-text-primary underline underline-offset-2 transition-colors">terms</a>
+              {" and "}
+              <a href="/privacy" className="text-text-dim hover:text-text-primary underline underline-offset-2 transition-colors">privacy policy</a>
             </p>
           </div>
         </div>
       </div>
 
-      <div className="hidden lg:flex flex-1 bg-zinc-950 items-center justify-center p-16">
-        <div className="max-w-sm">
-          <div className="space-y-4">
-            {[
-              { type: "feature", title: "CSV export for reports", desc: "You can now download any report as a CSV file directly from the reports page.", time: "2 hours ago" },
-              { type: "fix", title: "Fixed profile page crash", desc: "Resolved an issue that caused the app to crash when loading certain user profiles.", time: "Yesterday" },
-              { type: "improvement", title: "Faster dashboard load", desc: "Dashboard now loads up to 3x faster thanks to improved data fetching.", time: "3 days ago" },
-            ].map((entry, i) => (
-              <div
-                key={i}
-                className="bg-zinc-900 border border-zinc-800 rounded-xl p-4"
-                style={{ opacity: 1 - i * 0.15, transform: `scale(${1 - i * 0.02})` }}
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-md ${
-                    entry.type === "feature" ? "bg-blue-900/50 text-blue-400" :
-                    entry.type === "fix" ? "bg-rose-900/50 text-rose-400" :
-                    "bg-emerald-900/50 text-emerald-400"
-                  }`}>
-                    {entry.type === "feature" ? "New feature" : entry.type === "fix" ? "Bug fix" : "Improvement"}
-                  </span>
-                  <span className="text-[10px] text-zinc-600 ml-auto">{entry.time}</span>
-                </div>
-                <p className="text-sm font-medium text-zinc-100 mb-1">{entry.title}</p>
-                <p className="text-xs text-zinc-500 leading-relaxed">{entry.desc}</p>
-              </div>
-            ))}
-          </div>
-          <p className="mt-6 text-xs text-zinc-600 text-center">
-            Auto-generated from your GitHub commits
-          </p>
+      {/* right panel */}
+      <div className="relative z-10 hidden lg:flex flex-1 flex-col justify-center px-12 border-l border-white/[0.06] bg-surface-1">
+        <p className="text-[10px] font-mono text-text-ghost uppercase tracking-widest mb-6">generated from your commits</p>
+        <div className="space-y-3">
+          {[
+            { type: "feat", title: "CSV export for reports", desc: "Download any report as a CSV file directly from the reports page.", delay: "" },
+            { type: "fix", title: "Fixed profile page crash", desc: "Resolved an issue when loading certain user profiles.", delay: "opacity-70" },
+            { type: "improve", title: "3x faster dashboard", desc: "Improved data fetching and caching throughout.", delay: "opacity-40" },
+          ].map((entry) => (
+            <div key={entry.title} className={`cp-card p-4 ${entry.delay}`}>
+              <div className={`cp-badge mb-2.5 ${
+                entry.type === "feat" ? "cp-badge-feat" :
+                entry.type === "fix" ? "cp-badge-fix" : "cp-badge-improve"
+              }`}>{entry.type}</div>
+              <p className="text-[13px] font-medium text-text-primary mb-1">{entry.title}</p>
+              <p className="text-[11px] text-text-dim leading-relaxed">{entry.desc}</p>
+            </div>
+          ))}
         </div>
+        <p className="mt-6 text-[10px] font-mono text-text-ghost">
+          written by AI · reviewed by you · published automatically
+        </p>
       </div>
     </main>
   )

@@ -1,31 +1,120 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap'); */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
+  body {
+    background: #09090b;
+    color: #fafafa;
+  }
 
-:root {
-  --font-sans: 'Geist', system-ui, sans-serif;
-  --font-mono: 'Geist Mono', monospace;
+  ::selection {
+    background: rgba(255,255,255,0.15);
+    color: #fafafa;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #27272a;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3f3f46;
+  }
 }
 
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@layer components {
+  .cp-card {
+    @apply bg-surface-1 border border-white/[0.06] rounded-xl;
+  }
 
-body {
-  font-family: var(--font-sans);
-  color: #09090b;
-  background: #fafafa;
-}
+  .cp-card-hover {
+    @apply cp-card transition-all duration-200 hover:border-white/[0.12] hover:bg-surface-2/50;
+  }
 
-::selection {
-  background: #09090b;
-  color: #fff;
-}
+  .cp-btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium
+           bg-white text-surface rounded-lg
+           transition-all duration-150 active:scale-[0.98]
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30
+           disabled:opacity-40 disabled:cursor-not-allowed;
+  }
 
-input, textarea, select {
-  font-family: var(--font-sans);
+  .cp-btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium
+           bg-white/[0.06] text-text-primary border border-white/[0.08]
+           rounded-lg transition-all duration-150 active:scale-[0.98]
+           hover:bg-white/[0.1] hover:border-white/[0.15]
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30
+           disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  .cp-btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-3 py-1.5 text-xs font-medium
+           text-text-muted rounded-lg transition-all duration-150
+           hover:text-text-primary hover:bg-white/[0.05];
+  }
+
+  .cp-badge {
+    @apply inline-flex items-center text-[10px] font-semibold px-1.5 py-0.5
+           rounded font-mono tracking-wide;
+  }
+
+  .cp-badge-feat {
+    @apply cp-badge bg-blue-500/10 text-blue-400;
+  }
+
+  .cp-badge-fix {
+    @apply cp-badge bg-red-500/10 text-red-400;
+  }
+
+  .cp-badge-improve {
+    @apply cp-badge bg-green-500/10 text-green-400;
+  }
+
+  .cp-badge-draft {
+    @apply cp-badge bg-amber-500/10 text-amber-400;
+  }
+
+  .cp-input {
+    @apply w-full px-3 py-2.5 text-sm
+           bg-white/[0.04] border border-white/[0.08] rounded-lg
+           text-text-primary placeholder-text-dim
+           transition-all duration-150
+           focus:outline-none focus:border-white/[0.24] focus:bg-white/[0.06]
+           font-sans;
+  }
+
+  .cp-nav {
+    @apply sticky top-0 z-50 flex items-center justify-between
+           px-6 h-12
+           bg-surface/80 backdrop-blur-md
+           border-b border-white/[0.06];
+  }
+
+  .cp-logo {
+    @apply flex items-center gap-2;
+  }
+
+  .cp-logo-mark {
+    @apply w-5 h-5 bg-white rounded-[4px] flex items-center justify-center flex-shrink-0;
+  }
+
+  .cp-logo-text {
+    @apply text-[13px] font-semibold text-text-primary tracking-tight;
+  }
 }

@@ -1,32 +1,29 @@
-import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
-import './globals.css'
+import type { Metadata } from "next"
+import { Geist, Geist_Mono } from "next/font/google"
+import "./globals.css"
 
-// Initialize Geist Sans
 const geistSans = Geist({
-  variable: '--font-sans',
-  subsets: ['latin'],
+  variable: "--font-sans",
+  subsets: ["latin"],
+  display: "swap",
 })
 
-// Initialize Geist Mono
 const geistMono = Geist_Mono({
-  variable: '--font-mono',
-  subsets: ['latin'],
+  variable: "--font-mono",
+  subsets: ["latin"],
+  display: "swap",
 })
 
 export const metadata: Metadata = {
-  title: 'ChangePatch — Auto-generate changelogs from GitHub commits',
-  description: 'Connect your GitHub repo and ChangePatch automatically writes, publishes, and emails your changelog every time you ship.',
+  title: "ChangePatch -- Auto-generate changelogs from GitHub commits",
+  description: "Connect your GitHub repo and ChangePatch automatically writes, publishes, and emails your changelog every time you ship.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="antialiased font-sans bg-[#fafafa] text-[#09090b]">
+      <body className="antialiased bg-surface text-text-primary font-sans min-h-screen">
         {children}
       </body>
     </html>
