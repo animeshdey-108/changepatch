@@ -3,18 +3,20 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export async function GET(request: NextRequest) {
-  const { searchParams, origin } = new URL(request.url)
+  const { searchParams } = new URL(request.url)
   const code = searchParams.get('code')
   const error = searchParams.get('error')
   const next = searchParams.get('next') ?? '/dashboard'
 
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL!
+
   if (error) {
     console.error('OAuth callback error:', error)
-    return NextResponse.redirect(`${origin}/login?error=${error}`)
+    return NextResponse.redirect(`${appUrl}/login?error=${error}`)
   }
 
   if (!code) {
-    return NextResponse.redirect(`${origin}/login?error=no_code`)
+    return NextResponse.redirect(`${appUrl}/login?error=no_code`)
   }
 
   const supabase = await createClient()
@@ -22,8 +24,8 @@ export async function GET(request: NextRequest) {
 
   if (exchangeError) {
     console.error('Code exchange error:', exchangeError)
-    return NextResponse.redirect(`${origin}/login?error=exchange_failed`)
+    return NextResponse.redirect(`${appUrl}/login?error=exchange_failed`)
   }
 
-  return NextResponse.redirect(`${origin}${next}`)
+  return NextResponse.redirect(`${appUrl}${next}`)
 }
