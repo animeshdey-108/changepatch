@@ -1,0 +1,1 @@
+ALTER TABLE public.generated_entries ADD COLUMN IF NOT EXISTS reasoning text;

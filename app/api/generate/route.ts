@@ -71,6 +71,7 @@ const { data: generatedEntry, error: insertError } = await supabase
     status: 'draft',
     provider: pending.provider,
     prompt_version: 'v1',
+    reasoning: result.reasoning,
   })
   .select()
   .single()
