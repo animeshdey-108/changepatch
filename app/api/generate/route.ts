@@ -161,3 +161,6 @@ async function notifyGenerationFailed(
   // placeholder — will wire up Resend email notification in the email module
   console.log(`TODO: notify user for repo ${repoId} that generation failed`)
 }
+export async function GET(request: Request) {
+  return POST(request)
+}
